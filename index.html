@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="./index.css" rel="stylesheet" type="text/css">
+  <title>Annoations for Visual Object Detection</title>
+</head>
+
+<body>
+  <center>
+    <h1>Annotations for Visual Object Detection</h1>
+    <div id="drawing">
+      <canvas id="canvasImg" width="1000" height="500">
+      </canvas>
+    </div>
+    <p id='imagePath'></p>
+    <button type="button" id="clear" class="button" style="background-color:red">Clear</button>
+    <button type="button" id="finish" class="button" style="background-color:#007dc1">Finish</button>
+    <!--<input type="checkbox" id="partial" name="check" />Partial-->
+  </center>
+</body>
+
+<script>
+  // src='./renderer.js'>
+  require('./renderer.js')
+
+</script>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "electron-img-anno",
+  "version": "1.0.0",
+  "description": "draw bounding boxes of objects in images using gui via electron ",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "debug": "node --nolazy --debug-brk=5858 main.js"
+  },
+  "author": "changmao",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.6.11",
+    "jquery": "^3.2.1",
+    "fs": "^0.0.1"
+  }
+}
