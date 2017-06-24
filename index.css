@@ -1,0 +1,28 @@
+#canvasImg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+}
+#drawing {
+    width:1000px;
+    height:500px;
+    border: 0px;
+    position: relative;
+}
+.rectangle {
+    border: 1px solid #FF0000;
+    position: absolute;
+}
+.button {
+    color:#ffffff;
+    border-radius:5px;
+    padding: 10px 20px;
+    text-align: center;
+    margin: 20px 30px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    display:inline-block;
+}
