@@ -1,6 +1,8 @@
 // definition
 window.$ = window.jQuery = require('jquery');
 var fs = require('fs');
+//const electronLocalshortcut = require('electron-localshortcut');
+
 var draw_region = document.getElementById('drawing');
 var canvas = document.getElementById("canvasImg");
 var context = canvas.getContext('2d');
@@ -20,8 +22,18 @@ findFile = function (dir) {
 }
 findFile(pathRoot);
 current_id = 0;
+if (fs.existsSync('anno.txt')) {
+    saved = fs.readFileSync('anno.txt').toString().split("\n");
+    //console.log(saved);
+    last_anno_img_path = saved[saved.length - 2];
+    if (last_anno_img_path.length > 0) {
+        last_anno_img_path = last_anno_img_path.split('|')[0];
+        while (pathArr[current_id++] != last_anno_img_path);
+    }
+}
+
 currentImg = new Image();
-currentImg.src = pathArr[current_id];
+loaded = false;
 currentImg.onload = function () {
     if (currentImg.width > currentImg.height) {
         context.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
@@ -34,8 +46,17 @@ currentImg.onload = function () {
         context.rotate(-90 * Math.PI / 180);
         context.translate(-center_cood.x, -center_cood.y);
     }
-    $('#imagePath').text(pathArr[current_id]);
+    $('#imagePath').text(pathArr[current_id] 
+        + ' (' + (current_id + 1) + '/' + pathArr.length + ')');
+    $('.rectangle').remove();
+    loaded = true;
+    //$('#finish').show();
 }
+currentImg.onerror = function () { 
+    alert(pathArr[current_id] + ' loading failed!');
+};
+currentImg.src = pathArr[current_id]; // take care of the order
+
 window.onload = function () {
     initDraw(draw_region);
 }
@@ -89,23 +110,28 @@ function initDraw(draw_region) {
 }
 
 $('#finish').click(function () {
+    if (loaded == false) {
+        alert('Image has not been loaded yet!');
+        return;
+    }
     if ($('.rectangle').length > 0) {
-        var writeString = pathArr[current_id] + ':';
+        var writeString = pathArr[current_id] + '|';
         $('.rectangle').each(function () {
             var position = $(this).position();
             writeString += position.left / canvas.width + ','
                          + position.top / canvas.height + ','
-                         + ($(this).width() + position.left) / canvas.width + ','
-                         + ($(this).height() + position.top) / canvas.height + ';';
+                         + Math.min(($(this).width() + position.left) / canvas.width, 1.0) + ','
+                         + Math.min(($(this).height() + position.top) / canvas.height, 1.0) + ';';
         })
         fs.appendFile('anno.txt', writeString + '\n', function (err) {
             if (err) throw err;
         })
-        $('.rectangle').remove();
     }
     current_id += 1;
     if (current_id < pathArr.length) {
         currentImg.src = pathArr[current_id];
+        loaded = false;
+        //$('#finish').hide();
     }
     else {
         $('#imagePath').text("NO IMAGES!");
@@ -115,3 +141,7 @@ $('#finish').click(function () {
 $('#clear').click(function () {
     $('.rectangle').remove();
 })
+// add hotkey to finish button
+// electronLocalshortcut.register(mainWindow, 'n', () => {
+//     console.log('You pressed ctrl & A');
+// });
