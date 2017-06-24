@@ -9,6 +9,8 @@ var context = canvas.getContext('2d');
 const pathRoot = 'E:/box_img';
 var pathArr = [];
 
+
+/*
 findFile = function (dir) {
     fs.readdirSync(dir).forEach(function (file) {
         var stat = fs.statSync(dir + "/" + file);
@@ -21,6 +23,24 @@ findFile = function (dir) {
     })
 }
 findFile(pathRoot);
+
+var writeFile = fs.createWriteStream('path.txt');
+writeFile.on('error', function(err) {
+    alert('error when creating writing stream for path.txt')
+})
+pathArr.forEach(function(s) {
+    writeFile.write(s + '\n');
+})
+writeFile.end();
+*/
+if (!fs.existsSync('path.txt')) {
+    alert('path file not existed!');
+}
+else {
+    pathArr = fs.readFileSync('path.txt').toString().split("\n");
+    pathArr = pathArr.slice(0, -1);
+}
+
 current_id = 0;
 if (fs.existsSync('anno.txt')) {
     saved = fs.readFileSync('anno.txt').toString().split("\n");
@@ -32,23 +52,23 @@ if (fs.existsSync('anno.txt')) {
     }
 }
 
-currentImg = new Image();
-loaded = false;
+var currentImg = new Image();
+var loaded = false;
 currentImg.onload = function () {
-    if (currentImg.width > currentImg.height) {
-        context.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
+    if (this.naturalWidth > this.naturalHeight) { // use this, and natural
+        context.drawImage(this, 0, 0, canvas.width, canvas.height);
     }
     else { // 旋转90度
         var center_cood = {x: canvas.width / 2, y: canvas.height / 2};
         context.translate(center_cood.x, center_cood.y);
         context.rotate(90 * Math.PI / 180);
-        context.drawImage(currentImg, -center_cood.y, -center_cood.x, canvas.height, canvas.width);
+        context.drawImage(this, -center_cood.y, -center_cood.x, canvas.height, canvas.width);
         context.rotate(-90 * Math.PI / 180);
         context.translate(-center_cood.x, -center_cood.y);
     }
     $('#imagePath').text(pathArr[current_id] 
         + ' (' + (current_id + 1) + '/' + pathArr.length + ')');
-    $('.rectangle').remove();
+    $('.rectangle').remove(); // remove rectangle after loading
     loaded = true;
     //$('#finish').show();
 }
