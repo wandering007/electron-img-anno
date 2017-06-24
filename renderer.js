@@ -23,7 +23,17 @@ current_id = 0;
 currentImg = new Image();
 currentImg.src = pathArr[current_id];
 currentImg.onload = function () {
-    context.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
+    if (currentImg.width > currentImg.height) {
+        context.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
+    }
+    else { // 旋转90度
+        var center_cood = {x: canvas.width / 2, y: canvas.height / 2};
+        context.translate(center_cood.x, center_cood.y);
+        context.rotate(90 * Math.PI / 180);
+        context.drawImage(currentImg, -center_cood.y, -center_cood.x, canvas.height, canvas.width);
+        context.rotate(-90 * Math.PI / 180);
+        context.translate(-center_cood.x, -center_cood.y);
+    }
     $('#imagePath').text(pathArr[current_id]);
 }
 window.onload = function () {
