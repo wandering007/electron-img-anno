@@ -79,9 +79,7 @@ currentImg.src = pathArr[current_id]; // take care of the order
 
 window.onload = function () {
     initDraw(draw_region);
-}
-
-var initPos = { x: draw_region.offsetLeft, y: draw_region.offsetTop };
+} 
 
 function initDraw(draw_region) {
     function setMousePosition(e) {
@@ -100,12 +98,13 @@ function initDraw(draw_region) {
     var element = null;
 
     draw_region.onmousemove = function (e) {
+        //initPos = { x: draw_region.offsetLeft, y: draw_region.offsetTop };
         setMousePosition(e);
         if (element != null) {
             element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
             element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
-            element.style.left = ((mouse.x - mouse.startX < 0) ? mouse.x : mouse.startX) - initPos.x + 'px';
-            element.style.top = ((mouse.y - mouse.startY < 0) ? mouse.y : mouse.startY) - initPos.y + 'px';
+            element.style.left = ((mouse.x - mouse.startX < 0) ? mouse.x : mouse.startX) - draw_region.offsetLeft + 'px';
+            element.style.top = ((mouse.y - mouse.startY < 0) ? mouse.y : mouse.startY) - draw_region.offsetTop + 'px';
         }
     }
 
@@ -121,8 +120,8 @@ function initDraw(draw_region) {
             mouse.startY = mouse.y;
             element = document.createElement('div');
             element.className = 'rectangle';
-            element.style.left = mouse.x - initPos.left + 'px';
-            element.style.top = mouse.y - initPos.top + 'px';
+            element.style.left = mouse.x - draw_region.offsetLeft + 'px';
+            element.style.top = mouse.y - draw_region.offsetTop + 'px';
             draw_region.appendChild(element);
             draw_region.style.cursor = 'crosshair';
         }
