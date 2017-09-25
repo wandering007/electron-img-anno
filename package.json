@@ -12,6 +12,6 @@
   "devDependencies": {
     "electron": "^1.6.11",
     "jquery": "^3.2.1",
-    "fs": "^0.0.1"
+    "fs": "^0.0.2"
   }
 }
